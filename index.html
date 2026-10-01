@@ -1,0 +1,724 @@
+<title>Карта уютных мест для чтения</title>
+
+<style>
+  /* Design plan: warm library aesthetic with cream and brown tones, classical typography, card-based layout */
+  :root {
+    --cream: #F5F3F0;
+    --text: #3D3D3D;
+    --accent: #A67C52;
+    --accent-light: #E8DCC8;
+    --accent-dark: #6B5340;
+    --border: #D9CCC0;
+
+    --font-display: 'Georgia', 'Garamond', serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --cream: #2A2620;
+      --text: #E8E6E3;
+      --accent: #C8956F;
+      --accent-light: #3D3530;
+      --accent-dark: #9B7355;
+      --border: #4A423A;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --cream: #2A2620;
+    --text: #E8E6E3;
+    --accent: #C8956F;
+    --accent-light: #3D3530;
+    --accent-dark: #9B7355;
+    --border: #4A423A;
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Hero section */
+  .hero {
+    padding: var(--space-xl) var(--space-lg);
+    text-align: center;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 400;
+    text-wrap: balance;
+    margin: 0 0 var(--space-sm) 0;
+    color: var(--accent-dark);
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--text);
+    opacity: 0.85;
+  }
+
+  /* Filters */
+  .filters {
+    padding: var(--space-lg);
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .filter-btn {
+    padding: var(--space-xs) var(--space-md);
+    border: 1.5px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover {
+    background: var(--accent);
+    color: var(--cream);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    color: var(--cream);
+  }
+
+  /* Places grid */
+  .places-section {
+    padding: var(--space-lg);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin: 0 0 var(--space-lg) 0;
+    color: var(--accent-dark);
+  }
+
+  .places-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .place-card {
+    background: var(--accent-light);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .place-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .place-image {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--cream);
+  }
+
+  .place-content {
+    padding: var(--space-md);
+  }
+
+  .place-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    margin: 0 0 var(--space-xs) 0;
+    color: var(--accent-dark);
+  }
+
+  .place-type {
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: var(--space-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .place-desc {
+    font-size: 0.95rem;
+    margin: 0 0 var(--space-sm) 0;
+    line-height: 1.5;
+  }
+
+  .place-tags {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    background: var(--cream);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    color: var(--text);
+  }
+
+  /* Spot of the week */
+  .featured {
+    background: var(--accent);
+    color: var(--cream);
+    padding: var(--space-lg);
+    border-radius: 8px;
+    margin-bottom: var(--space-xl);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    align-items: center;
+  }
+
+  .featured h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin: 0 0 var(--space-md) 0;
+  }
+
+  .featured-image {
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(45deg, var(--accent-dark), var(--accent));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+  }
+
+  .featured-text p {
+    margin: 0 0 var(--space-sm) 0;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .featured {
+      grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+      font-size: 1.8rem;
+    }
+  }
+
+  /* Form */
+  .propose-section {
+    background: var(--accent-light);
+    padding: var(--space-lg);
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .propose-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin: 0 0 var(--space-md) 0;
+    color: var(--accent-dark);
+  }
+
+  .form-group {
+    margin-bottom: var(--space-md);
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.95rem;
+    margin-bottom: var(--space-xs);
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: var(--space-sm);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    background: var(--cream);
+    color: var(--text);
+    box-sizing: border-box;
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: var(--space-md);
+    background: var(--accent);
+    color: var(--cream);
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .submit-btn:hover {
+    background: var(--accent-dark);
+  }
+
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+  }
+
+  .places-section {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Success message */
+  .success-msg {
+    display: none;
+    background: #7BC67B;
+    color: white;
+    padding: var(--space-md);
+    border-radius: 6px;
+    margin-bottom: var(--space-md);
+    text-align: center;
+  }
+
+  .success-msg.show {
+    display: block;
+  }
+</style>
+
+<div class="container">
+  <div class="hero">
+    <h1>Карта уютных мест для чтения</h1>
+    <p>Найдите идеальное место, где можно забыть о времени с любимой книгой. Фильтруйте по настроению и открывайте новые уголки города.</p>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">Все места</button>
+  <button class="filter-btn" data-filter="quiet">🤫 Тихо</button>
+  <button class="filter-btn" data-filter="coffee">☕ С кофе</button>
+  <button class="filter-btn" data-filter="outdoor">🌳 На улице</button>
+  <button class="filter-btn" data-filter="work">💼 Для работы</button>
+</div>
+
+<div class="places-section">
+  <div class="container">
+    <h2 class="section-title">Рекомендованные места</h2>
+
+    <div class="places-grid" id="placesGrid">
+      <div class="place-card" data-tags="quiet">
+        <div class="place-image">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; display:block;">
+            <!-- Shelf background -->
+            <rect width="200" height="200" fill="#D4A574"/>
+            <!-- Shelves -->
+            <rect x="10" y="60" width="180" height="3" fill="#8B6F47" opacity="0.6"/>
+            <rect x="10" y="110" width="180" height="3" fill="#8B6F47" opacity="0.6"/>
+            <rect x="10" y="160" width="180" height="3" fill="#8B6F47" opacity="0.6"/>
+            <!-- Books -->
+            <rect x="20" y="35" width="18" height="25" fill="#C41E3A" rx="1"/>
+            <rect x="42" y="30" width="16" height="30" fill="#1F4788" rx="1"/>
+            <rect x="62" y="32" width="19" height="28" fill="#8B4513" rx="1"/>
+            <rect x="85" y="28" width="17" height="32" fill="#DAA520" rx="1"/>
+            <rect x="106" y="35" width="18" height="25" fill="#228B22" rx="1"/>
+            <rect x="128" y="30" width="17" height="30" fill="#4B0082" rx="1"/>
+            <rect x="149" y="33" width="19" height="27" fill="#DC143C" rx="1"/>
+            <!-- Lower shelf books -->
+            <rect x="20" y="85" width="16" height="25" fill="#2F4F4F" rx="1"/>
+            <rect x="40" y="80" width="18" height="30" fill="#8B0000" rx="1"/>
+            <rect x="62" y="82" width="17" height="28" fill="#CD853F" rx="1"/>
+            <rect x="83" y="78" width="19" height="32" fill="#B22222" rx="1"/>
+            <rect x="106" y="85" width="17" height="25" fill="#4169E1" rx="1"/>
+            <rect x="127" y="80" width="18" height="30" fill="#8B7355" rx="1"/>
+            <rect x="149" y="83" width="18" height="27" fill="#A52A2A" rx="1"/>
+            <!-- Bottom shelf books -->
+            <rect x="20" y="135" width="17" height="25" fill="#664D33" rx="1"/>
+            <rect x="41" y="130" width="18" height="30" fill="#800020" rx="1"/>
+            <rect x="63" y="132" width="16" height="28" fill="#DAA520" rx="1"/>
+            <rect x="83" y="128" width="19" height="32" fill="#2E8B57" rx="1"/>
+            <rect x="106" y="135" width="17" height="25" fill="#C41E3A" rx="1"/>
+            <rect x="127" y="130" width="18" height="30" fill="#191970" rx="1"/>
+            <rect x="149" y="133" width="18" height="27" fill="#8B4513" rx="1"/>
+          </svg>
+        </div>
+        <div class="place-content">
+          <div class="place-type">Библиотека</div>
+          <h3 class="place-title">Центральная городская библиотека</h3>
+          <p class="place-desc">Классическая атмосфера, высокие потолки, огромный выбор книг. Третий этаж идеален для спокойного чтения.</p>
+          <div class="place-tags">
+            <span class="tag">Тихо</span>
+            <span class="tag">Бесплатно</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-card" data-tags="coffee work">
+        <div class="place-image">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; display:block;">
+            <!-- Background wall -->
+            <rect width="200" height="200" fill="#E8D7C3"/>
+            <!-- Wooden panel pattern -->
+            <rect x="10" y="20" width="60" height="120" fill="#C9B29A" opacity="0.4"/>
+            <rect x="90" y="20" width="70" height="120" fill="#D4C4B0" opacity="0.3"/>
+            <!-- Coffee cup -->
+            <ellipse cx="100" cy="100" rx="35" ry="40" fill="#8B6F47" stroke="#6B5340" stroke-width="2"/>
+            <path d="M 140 80 Q 155 90 150 115" fill="none" stroke="#6B5340" stroke-width="3" stroke-linecap="round"/>
+            <!-- Coffee inside -->
+            <ellipse cx="100" cy="95" rx="30" ry="8" fill="#6B4423" opacity="0.8"/>
+            <!-- Coffee steam -->
+            <path d="M 85 65 Q 80 50 85 40" fill="none" stroke="#A67C52" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+            <path d="M 100 60 Q 95 45 102 35" fill="none" stroke="#A67C52" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+            <path d="M 115 65 Q 110 48 120 38" fill="none" stroke="#A67C52" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+            <!-- Saucer -->
+            <ellipse cx="100" cy="138" rx="42" ry="10" fill="#D9CCC0" stroke="#A67C52" stroke-width="1.5"/>
+            <!-- Decorative lamp in background -->
+            <circle cx="40" cy="50" r="8" fill="#DAA520" opacity="0.6"/>
+            <rect x="38" y="60" width="4" height="25" fill="#8B7355" opacity="0.5"/>
+            <!-- Small plant -->
+            <circle cx="160" cy="120" r="6" fill="#228B22" opacity="0.7"/>
+            <circle cx="165" cy="115" r="5" fill="#2E8B57" opacity="0.7"/>
+            <circle cx="155" cy="115" r="5" fill="#2E8B57" opacity="0.7"/>
+            <rect x="161" y="130" width="3" height="15" fill="#8B7355" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="place-content">
+          <div class="place-type">Кофейня</div>
+          <h3 class="place-title">Лечебный напиток</h3>
+          <p class="place-desc">Уютная кофейня со старинным интерьером, soft jazz по вечерам, и самый лучший капучино в округе.</p>
+          <div class="place-tags">
+            <span class="tag">С кофе</span>
+            <span class="tag">Для работы</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-card" data-tags="outdoor quiet">
+        <div class="place-image">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; display:block;">
+            <!-- Sky gradient simulation -->
+            <rect width="200" height="200" fill="#B4D7E8"/>
+            <!-- River -->
+            <rect x="0" y="140" width="200" height="60" fill="#7BA8C8" opacity="0.7"/>
+            <!-- River waves -->
+            <path d="M 10 150 Q 20 148 30 150 T 50 150" fill="none" stroke="#5A8BA8" stroke-width="1" opacity="0.5"/>
+            <path d="M 40 160 Q 50 158 60 160 T 80 160" fill="none" stroke="#5A8BA8" stroke-width="1" opacity="0.5"/>
+            <path d="M 120 155 Q 130 153 140 155 T 160 155" fill="none" stroke="#5A8BA8" stroke-width="1" opacity="0.5"/>
+            <!-- Bench -->
+            <rect x="70" y="120" width="60" height="5" fill="#8B6F47" rx="2"/>
+            <rect x="75" y="125" width="4" height="20" fill="#6B5340" rx="1"/>
+            <rect x="121" y="125" width="4" height="20" fill="#6B5340" rx="1"/>
+            <!-- Left tree trunk -->
+            <rect x="25" y="80" width="12" height="60" fill="#5C4033"/>
+            <!-- Left tree foliage -->
+            <circle cx="31" cy="65" r="22" fill="#2E7D32"/>
+            <circle cx="20" cy="55" r="18" fill="#388E3C" opacity="0.8"/>
+            <circle cx="42" cy="58" r="20" fill="#388E3C" opacity="0.8"/>
+            <!-- Right tree trunk -->
+            <rect x="163" y="75" width="12" height="65" fill="#5C4033"/>
+            <!-- Right tree foliage -->
+            <circle cx="169" cy="55" r="25" fill="#2E7D32"/>
+            <circle cx="155" cy="48" r="20" fill="#388E3C" opacity="0.8"/>
+            <circle cx="183" cy="50" r="22" fill="#388E3C" opacity="0.8"/>
+            <!-- Back tree (center) -->
+            <rect x="92" y="90" width="8" height="50" fill="#5C4033" opacity="0.6"/>
+            <circle cx="96" cy="75" r="18" fill="#2E7D32" opacity="0.6"/>
+            <!-- Grass -->
+            <rect x="0" y="135" width="200" height="5" fill="#6B8E23"/>
+            <!-- Reading figure silhouette on bench -->
+            <circle cx="95" cy="100" r="4" fill="#3D3D3D" opacity="0.7"/>
+            <rect x="92" y="105" width="6" height="8" fill="#3D3D3D" opacity="0.6"/>
+            <!-- Book in hand -->
+            <rect x="88" y="108" width="4" height="6" fill="#8B4513" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="place-content">
+          <div class="place-type">Парк</div>
+          <h3 class="place-title">Сквер у реки</h3>
+          <p class="place-desc">Тихий парк вдоль реки с деревянными скамейками. Пение птиц и шум воды создают идеальный саундтрек для чтения.</p>
+          <div class="place-tags">
+            <span class="tag">На улице</span>
+            <span class="tag">Тихо</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-card" data-tags="quiet work">
+        <div class="place-image">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; display:block;">
+            <!-- Sky -->
+            <rect width="200" height="200" fill="#D4C4B0"/>
+            <!-- Left building wall -->
+            <rect x="10" y="30" width="75" height="130" fill="#B89968"/>
+            <!-- Left building bricks pattern -->
+            <g opacity="0.3">
+              <rect x="15" y="35" width="12" height="15" fill="#8B6F47"/>
+              <rect x="30" y="35" width="12" height="15" fill="#8B6F47"/>
+              <rect x="45" y="35" width="12" height="15" fill="#8B6F47"/>
+              <rect x="60" y="35" width="12" height="15" fill="#8B6F47"/>
+              <rect x="22" y="53" width="12" height="15" fill="#8B6F47"/>
+              <rect x="37" y="53" width="12" height="15" fill="#8B6F47"/>
+              <rect x="52" y="53" width="12" height="15" fill="#8B6F47"/>
+            </g>
+            <!-- Left window -->
+            <rect x="20" y="45" width="15" height="12" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+            <line x1="27.5" y1="45" x2="27.5" y2="57" stroke="#6B5340" stroke-width="0.5"/>
+            <!-- Right building wall -->
+            <rect x="115" y="30" width="75" height="130" fill="#A89878"/>
+            <!-- Right window -->
+            <rect x="130" y="60" width="15" height="12" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+            <rect x="155" y="60" width="15" height="12" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+            <!-- Door -->
+            <rect x="140" y="125" width="18" height="35" fill="#654321" stroke="#3D3D3D" stroke-width="1"/>
+            <circle cx="155" cy="142" r="1.5" fill="#DAA520"/>
+            <!-- Courtyard ground -->
+            <rect x="10" y="155" width="180" height="45" fill="#B5A89F"/>
+            <!-- Stone tiles pattern -->
+            <g opacity="0.4" stroke="#8B7D6B" stroke-width="0.5">
+              <rect x="20" y="160" width="25" height="25" fill="none"/>
+              <rect x="50" y="160" width="25" height="25" fill="none"/>
+              <rect x="80" y="160" width="25" height="25" fill="none"/>
+              <rect x="110" y="160" width="25" height="25" fill="none"/>
+              <rect x="140" y="160" width="25" height="25" fill="none"/>
+              <rect x="35" y="190" width="25" height="25" fill="none"/>
+              <rect x="65" y="190" width="25" height="25" fill="none"/>
+              <rect x="95" y="190" width="25" height="25" fill="none"/>
+            </g>
+            <!-- Bench in courtyard -->
+            <rect x="45" y="175" width="35" height="4" fill="#8B7355" rx="2"/>
+            <rect x="50" y="179" width="3" height="12" fill="#6B5340"/>
+            <rect x="77" y="179" width="3" height="12" fill="#6B5340"/>
+            <!-- Ivy on wall -->
+            <circle cx="15" cy="75" r="2" fill="#2E7D32" opacity="0.6"/>
+            <circle cx="22" cy="80" r="2" fill="#2E7D32" opacity="0.6"/>
+            <circle cx="18" cy="90" r="2" fill="#2E7D32" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="place-content">
+          <div class="place-type">Внутренний двор</div>
+          <h3 class="place-title">Тихий дворик старого города</h3>
+          <p class="place-desc">Скрытый от суеты город дворик со старинными стенами. Здесь кажется, что время остановилось.</p>
+          <div class="place-tags">
+            <span class="tag">Тихо</span>
+            <span class="tag">Уединено</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-card" data-tags="coffee">
+        <div class="place-image">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; display:block;">
+            <!-- Background wall -->
+            <rect width="200" height="200" fill="#E8DCC8"/>
+            <!-- Gallery frame 1 (top left) -->
+            <rect x="15" y="20" width="50" height="60" fill="#D4B59F" stroke="#6B5340" stroke-width="2"/>
+            <rect x="18" y="23" width="44" height="54" fill="#F4D4B8"/>
+            <!-- Abstract art 1 -->
+            <circle cx="35" cy="35" r="8" fill="#C41E3A" opacity="0.7"/>
+            <circle cx="50" cy="45" r="6" fill="#1F4788" opacity="0.7"/>
+            <path d="M 20 55 L 40 50 L 50 60" fill="#8B4513" opacity="0.6"/>
+            <!-- Gallery frame 2 (top right) -->
+            <rect x="135" y="20" width="50" height="60" fill="#D4B59F" stroke="#6B5340" stroke-width="2"/>
+            <rect x="138" y="23" width="44" height="54" fill="#F4D4B8"/>
+            <!-- Abstract art 2 -->
+            <rect x="145" y="30" width="12" height="25" fill="#228B22" opacity="0.6"/>
+            <rect x="162" y="35" width="10" height="20" fill="#DAA520" opacity="0.6"/>
+            <circle cx="155" cy="50" r="5" fill="#4169E1" opacity="0.7"/>
+            <!-- Gallery frame 3 (middle) -->
+            <rect x="75" y="50" width="50" height="60" fill="#D4B59F" stroke="#6B5340" stroke-width="2"/>
+            <rect x="78" y="53" width="44" height="54" fill="#F4D4B8"/>
+            <!-- Abstract art 3 -->
+            <path d="M 85 80 Q 95 70 105 85" fill="none" stroke="#800020" stroke-width="3"/>
+            <path d="M 90 90 L 110 75" stroke="#B22222" stroke-width="2"/>
+            <!-- Table -->
+            <rect x="30" y="130" width="50" height="3" fill="#8B6F47"/>
+            <rect x="35" y="133" width="3" height="20" fill="#6B5340"/>
+            <rect x="75" y="133" width="3" height="20" fill="#6B5340"/>
+            <!-- Chair -->
+            <rect x="90" y="140" width="25" height="20" fill="#A89878" stroke="#6B5340" stroke-width="1"/>
+            <rect x="92" y="160" width="4" height="8" fill="#6B5340"/>
+            <rect x="108" y="160" width="4" height="8" fill="#6B5340"/>
+            <!-- Coffee cup on table -->
+            <circle cx="55" cy="125" r="6" fill="#8B6F47" stroke="#6B5340" stroke-width="1"/>
+            <ellipse cx="55" cy="121" rx="5" ry="3" fill="#6B4423"/>
+            <!-- Decorative plant -->
+            <circle cx="165" cy="150" r="5" fill="#2E7D32"/>
+            <circle cx="160" cy="145" r="4" fill="#388E3C"/>
+            <circle cx="170" cy="145" r="4" fill="#388E3C"/>
+            <rect x="163" y="155" width="2" height="10" fill="#8B7355"/>
+          </svg>
+        </div>
+        <div class="place-content">
+          <div class="place-type">Арт-кафе</div>
+          <h3 class="place-title">Вдохновение</h3>
+          <p class="place-desc">Галерея + кофе. На стенах висят картины местных художников, а в углу уютные кресла для читающих.</p>
+          <div class="place-tags">
+            <span class="tag">С кофе</span>
+            <span class="tag">Вдохновляет</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="featured">
+      <div>
+        <h2>📖 Место недели</h2>
+        <p><strong>Небольшая библиотека "Укромный уголок"</strong></p>
+        <p>Спрятана на втором этаже старого здания в центре. Владелец — сам писатель, поэтому здесь собрана удивительная коллекция редких изданий и первых выпусков. Кофе и печенье в придачу.</p>
+        <p><em>«Дорога сюда стоит посещения»</em> — говорят регулярные посетители.</p>
+      </div>
+      <div class="featured-image">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; display:block;">
+          <!-- Sky -->
+          <rect width="200" height="200" fill="#5B7FA6"/>
+          <!-- Building facade -->
+          <rect x="30" y="50" width="140" height="110" fill="#A89968" stroke="#6B5340" stroke-width="2"/>
+          <!-- Roof -->
+          <polygon points="30,50 100,15 170,50" fill="#8B6F47"/>
+          <!-- Columns -->
+          <rect x="40" y="70" width="8" height="80" fill="#D4C4B0" stroke="#6B5340" stroke-width="1"/>
+          <rect x="76" y="70" width="8" height="80" fill="#D4C4B0" stroke="#6B5340" stroke-width="1"/>
+          <rect x="112" y="70" width="8" height="80" fill="#D4C4B0" stroke="#6B5340" stroke-width="1"/>
+          <rect x="148" y="70" width="8" height="80" fill="#D4C4B0" stroke="#6B5340" stroke-width="1"/>
+          <!-- Column capitals -->
+          <rect x="38" y="68" width="12" height="3" fill="#8B7355"/>
+          <rect x="74" y="68" width="12" height="3" fill="#8B7355"/>
+          <rect x="110" y="68" width="12" height="3" fill="#8B7355"/>
+          <rect x="146" y="68" width="12" height="3" fill="#8B7355"/>
+          <!-- Upper windows -->
+          <rect x="50" y="60" width="15" height="12" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+          <rect x="85" y="60" width="15" height="12" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+          <rect x="120" y="60" width="15" height="12" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+          <!-- Main windows -->
+          <rect x="48" y="90" width="18" height="20" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+          <rect x="83" y="90" width="18" height="20" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+          <rect x="118" y="90" width="18" height="20" fill="#87CEEB" stroke="#6B5340" stroke-width="1"/>
+          <!-- Door -->
+          <rect x="85" y="140" width="30" height="50" fill="#5C4033" stroke="#3D3D3D" stroke-width="1.5"/>
+          <!-- Door handle -->
+          <circle cx="110" cy="165" r="1.5" fill="#DAA520"/>
+          <!-- Steps -->
+          <rect x="75" y="185" width="50" height="4" fill="#B5A89F" stroke="#8B7D6B" stroke-width="0.5"/>
+          <rect x="70" y="189" width="60" height="4" fill="#A89968" stroke="#8B7D6B" stroke-width="0.5"/>
+          <!-- Flag on roof -->
+          <rect x="95" y="10" width="2" height="8" fill="#654321"/>
+          <polygon points="97,12 97,18 105,15" fill="#C41E3A"/>
+          <!-- Evening light -->
+          <ellipse cx="100" cy="100" rx="80" ry="90" fill="#F4A460" opacity="0.1"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="propose-section">
+      <h2>Предложить место</h2>
+      <p style="margin-bottom: var(--space-md); opacity: 0.9;">Знаете чудесное место для чтения? Поделитесь с нами!</p>
+
+      <div class="success-msg" id="successMsg">Спасибо! Ваше предложение отправлено ✓</div>
+
+      <form id="proposeForm">
+        <div class="form-group">
+          <label for="place-name">Название места</label>
+          <input type="text" id="place-name" name="place-name" placeholder="Например: кофейня у метро" required>
+        </div>
+
+        <div class="form-group">
+          <label for="place-desc">Описание</label>
+          <textarea id="place-desc" name="place-desc" placeholder="Опишите, почему это место идеально для чтения..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="place-tags">Характеристика</label>
+          <input type="text" id="place-tags" name="place-tags" placeholder="Например: тихо, с кофе, на улице">
+        </div>
+
+        <div class="form-group">
+          <label for="place-email">Ваш email</label>
+          <input type="email" id="place-email" name="place-email" placeholder="ваша@почта.com" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Отправить предложение</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Filter functionality
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const placeCards = document.querySelectorAll('.place-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      placeCards.forEach(card => {
+        if (filter === 'all') {
+          card.style.display = 'block';
+        } else {
+          const tags = card.dataset.tags.split(' ');
+          card.style.display = tags.includes(filter) ? 'block' : 'none';
+        }
+      });
+    });
+  });
+
+  // Form submission
+  const form = document.getElementById('proposeForm');
+  const successMsg = document.getElementById('successMsg');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Show success message
+    successMsg.classList.add('show');
+    form.style.display = 'none';
+
+    // Reset after 3 seconds
+    setTimeout(() => {
+      form.reset();
+      form.style.display = 'block';
+      successMsg.classList.remove('show');
+    }, 3000);
+  });
+</script>
